@@ -1,0 +1,79 @@
+https://github.com/shivaverma/Sudoku-Solver/blob/master/model.py 
+
+
+Pour résoudre un Sudoku à l'aide d'un réseau de neurones graphiques (GNN), nous allons suivre ces étapes principales, en détaillant notamment la création de la matrice d'adjacence qui respecte les contraintes de Sudoku :
+1. Préparation des données
+
+    Grille incomplète: La grille de Sudoku est représentée par un tableau de 81 cellules (9x9), où chaque cellule contient un chiffre entre 1 et 9 ou un 0 pour les cellules vides.
+    Matrice de contrainte (matrice d'adjacence): Chaque cellule de la grille sera un nœud dans le graphique. Les arêtes entre les nœuds dépendent des règles du Sudoku : deux nœuds sont connectés s'ils doivent avoir des valeurs différentes, c'est-à-dire qu'ils sont dans la même ligne, la même colonne ou le même bloc 3x3.
+
+2. Création de la matrice d'adjacence
+
+Chaque nœud ii dans le graphe est connecté à d'autres nœuds qui partagent une ligne, une colonne ou un bloc 3x3 avec lui. Voici les détails de la connexion :
+
+    Ligne: Le nœud ii est relié à tous les autres nœuds dans sa ligne.
+    Colonne: Le nœud ii est également relié à tous les autres nœuds dans sa colonne.
+    Bloc 3x3: Enfin, ii est connecté à tous les nœuds dans le même bloc 3x3.
+
+Exemple pour la création d'une matrice d'adjacence:
+
+Pour le nœud à la position (r, c) (avec r et c allant de 0 à 8) :
+
+    Les nœuds connectés par la même ligne sont (r,0)(r,0), (r,1)(r,1), \ldots, (r,8)(r,8)
+    Les nœuds connectés par la même colonne sont (0,c)(0,c), (1,c)(1,c), \ldots, (8,c)(8,c)
+    Pour le bloc, si le nœud est dans le bloc en haut à gauche, tous les nœuds de ce bloc sont de (0,0)(0,0) à (2,2)(2,2)
+
+3. Implémentation de la matrice d'adjacence
+
+Vous pouvez utiliser un tableau 2D de taille 81x81 où chaque élément (i, j) est défini comme 1 si les nœuds ii et jj sont connectés selon les règles ci-dessus, et 0 sinon.
+4. Construction du GNN
+
+    Architecture du modèle: Utilisez des couches qui peuvent traiter les graphiques, comme Graph Convolutional Networks (GCN). Le modèle prend en entrée la matrice des caractéristiques (les chiffres possibles pour chaque cellule) et la matrice d'adjacence, et met à jour les caractéristiques des nœuds à chaque couche.
+    Fonction de perte: Définissez une fonction de perte qui pénalise les sorties incorrectes basées sur les solutions de Sudoku connues.
+
+5. Entraînement et évaluation
+
+    Entraînement: Utilisez les grilles de Sudoku comme entrées avec les solutions correspondantes pour entraîner le réseau.
+    Évaluation: Testez le modèle sur des grilles de Sudoku non vues pour évaluer sa performance.
+
+Voulez-vous que je vous montre comment implémenter une fonction pour générer cette matrice d'adjacence en Python, ou avez-vous d'autres aspects du projet sur lesquels vous aimeriez obtenir des conseils ?
+
+*******************explication matrice dadjacecnce
+*************************************************************************************
+La matrice d'adjacence que vous avez créée et enregistrée dans un fichier CSV représente les relations entre les différentes cellules d'une grille de Sudoku. Voici une explication détaillée de ce que représente cette matrice et comment elle est construite:
+Concept de la Matrice d'Adjacence
+
+Dans le contexte du Sudoku:
+
+    Chaque cellule de la grille est considérée comme un nœud dans un graphe.
+    Chaque nœud est connecté à d'autres nœuds si ils partagent une ligne, une colonne, ou un bloc 3x3 et doivent donc contenir des nombres différents selon les règles du Sudoku.
+
+Structure de la Matrice
+aù!
+    La matrice est de taille 81x81 car il y a 81 cellules dans une grille de Sudoku (9 lignes x 9 colonnes).
+    Chaque ligne de la matrice représente un nœud (une cellule du Sudoku).
+    Chaque colonne dans une ligne donnée indique si le nœud de cette ligne est connecté avec le nœud de la colonne. Une valeur de 1 signifie qu'ils sont connectés (ils doivent contenir des nombres différents), et une valeur de 0 signifie qu'ils ne sont pas connectés directement.
+
+Comment la Matrice est Générée
+
+Le code pour générer cette matrice fonctionne comme suit:
+
+    Initialisation: Une matrice 81x81 est initialisée avec des zéros.
+    Itération sur chaque cellule de la grille Sudoku (chacune représentée par une combinaison de ligne et de colonne).
+    Pour chaque cellule:
+        Ligne et Colonne: Connectez cette cellule à toutes les autres cellules dans la même ligne et la même colonne (sauf elle-même).
+        Bloc 3x3: Connectez cette cellule à toutes les autres cellules dans son bloc 3x3.
+
+Exemple Concret
+
+Prenons l'exemple de la cellule en position (0,0) (première ligne, première colonne):
+
+    Cette cellule doit être connectée à toutes les autres cellules de la première ligne et de la première colonne.
+    Elle doit aussi être connectée à toutes les cellules de son bloc 3x3, qui est le bloc en haut à gauche de la grille.
+    Dans la matrice d'adjacence, la première ligne (qui représente la cellule (0,0)) aura des 1 aux positions correspondant aux autres cellules de la première ligne, première colonne, et du bloc 3x3.
+
+Visualisation avec le Fichier CSV
+
+Pour mieux comprendre, vous pouvez ouvrir le fichier CSV avec un éditeur de texte ou Excel. Vous verrez une grande matrice avec beaucoup de 0 et des 1 là où les nœuds sont connectés. Chaque ligne de ce fichier représente un nœud, et chaque colonne dans cette ligne montre si ce nœud est connecté aux autres nœuds (cellules).
+
+Voulez-vous visualiser une partie spécifique de cette matrice ou avez-vous des questions spécifiques sur certaines connexions entre les cellules?
